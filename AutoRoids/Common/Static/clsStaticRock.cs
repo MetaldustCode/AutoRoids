@@ -6,6 +6,8 @@ namespace AutoRoids
 {
     internal static class StaticRock
     {
+        // Number of Ships
+        internal static int intNumberofPlayers = 5;
         // Starfield
         public static double dblOuterWidth = 3150;
 
@@ -61,7 +63,10 @@ namespace AutoRoids
         internal static List<EngineRock> lstEngineRock;
         internal static List<EngineBullet> lstBullets;
         internal static List<EngineExplode> lstExplode;
+
+        // Temp Lines
         internal static List<EngineBoundingBox> lstBoundingBox;
+        internal static List<EngineShipDebris> lstShipDebris;
 
         internal static EngineShip EngineShip;
         internal static EngineBackGround EngineBackGround;

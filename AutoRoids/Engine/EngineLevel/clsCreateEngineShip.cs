@@ -27,6 +27,8 @@ namespace AutoRoids
             clsAddBlock clsAddBlock = new clsAddBlock();
 
             double dblWidth = 0.003;
+
+            // Color Index
             int intShip = 3;
             int intThrust = 2;
             int intShield = 2;

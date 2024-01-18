@@ -12,10 +12,10 @@ namespace AutoRoids
         internal List<GameLine> lstLine = new List<GameLine>();
         internal int intColor;
 
-        internal EngineBoundingBox(List<GameLine> lstLine, int intColot)
+        internal EngineBoundingBox(List<GameLine> lstLine, int intColor)
         {
             this.lstLine = lstLine;
-            this.intColor = intColot;   
+            this.intColor = intColor;   
         }
     }
 }

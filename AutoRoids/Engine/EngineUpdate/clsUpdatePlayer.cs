@@ -87,7 +87,7 @@ namespace AutoRoids
 
                     List<BlockReference> lstBlockReference = new List<BlockReference>();
 
-                    for (int i = 0; i < 3; i++)
+                    for (int i = 0; i < StaticRock.intNumberofPlayers; i++)
                         AddPlayer(acTrans, acDb, acBlkTbl, ref lstBlockReference, i);
 
                     StaticRock.EngineScore = new EngineScore(lstBlockReference);
@@ -151,9 +151,9 @@ namespace AutoRoids
             double dblLeft = -1700;
 
             double dblWidth = 0.003;
-            int intShip = 3;
+            int intColor = 3;
             clsAddBlock clsAddBlock = new clsAddBlock();
-            BlockReference acBlkRefShip = clsAddBlock.BuildShip(acTrans, acDb, acBlkTbl, "Ship", intShip, 0, dblWidth, "Continuous", true, out List<Point2d> lstPointShip, true, out double dblScale);
+            BlockReference acBlkRefShip = clsAddBlock.BuildShip(acTrans, acDb, acBlkTbl, "Ship", intColor, 0, dblWidth, "Continuous", true, out List<Point2d> lstPointShip, true, out double dblScale);
 
             double dblRotation = 90;
             dblRotation = dblRotation.ToRadians();

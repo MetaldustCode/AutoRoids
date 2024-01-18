@@ -6,13 +6,13 @@ using System.Collections.Generic;
 
 namespace AutoRoids
 {
-    internal class clsCacheGetPolyline
+    internal class clsCacheGetBoundingBox
     {
         internal static List<Polyline> lstPolyline;
         internal static List<Boolean> lstVisible;
         internal static int intPolyline;
 
-        internal Polyline GetPolyline(Transaction acTrans, Database acDb, List<Point2d> lstPoint,
+        internal Polyline GetBoundingBox(Transaction acTrans, Database acDb, List<Point2d> lstPoint,
                                        int intColor, double dblWidth)
         {
             if (lstPolyline == null)
@@ -26,7 +26,7 @@ namespace AutoRoids
             if (intPolyline < lstPolyline.Count)
             {
                 acPline = lstPolyline[intPolyline];
-                ModifyPolyline(acTrans, acPline, lstPoint, intColor, dblWidth);
+                ModifyBoundingBox(acTrans, acPline, lstPoint, intColor, dblWidth);
                 lstVisible[intPolyline] = true;
             }
             else
@@ -43,7 +43,7 @@ namespace AutoRoids
             return acPline;
         }
 
-        internal void ModifyPolyline(Transaction acTrans, Polyline acPoly, List<Point2d> lstPoint,
+        internal void ModifyBoundingBox(Transaction acTrans, Polyline acPoly, List<Point2d> lstPoint,
                                      int intColor, double dblWidth)
         {
             if (acPoly.ObjectId.IsValid && !acPoly.ObjectId.IsErased)
@@ -51,9 +51,6 @@ namespace AutoRoids
                 acPoly = acTrans.GetObject(acPoly.ObjectId, OpenMode.ForWrite) as Polyline;
 
                 acPoly.Color = Color.FromColorIndex(Autodesk.AutoCAD.Colors.ColorMethod.ByAci, (Int16)intColor);
-
-                //for (int i = 0; i < acPoly.NumberOfVertices +1; i++)
-                //    acPoly.RemoveVertexAt(i);
 
                 if (acPoly.NumberOfVertices == lstPoint.Count)
                 {
@@ -63,14 +60,11 @@ namespace AutoRoids
 
                 acPoly.ConstantWidth = dblWidth;
 
-                //for (int i = 0; i < lstPoint.Count; i++)
-                //    acPoly.AddVertexAt(i, new Point2d(lstPoint[i].X, lstPoint[i].Y), 0, dblWidth, dblWidth);
-
                 acPoly.Visible = true;
             }
         }
 
-        internal void HidePolyline(Transaction acTrans)
+        internal void HideBoundingBox(Transaction acTrans)
         {
             if (lstPolyline != null)
             {
@@ -92,6 +86,43 @@ namespace AutoRoids
                     }
                 }
             }
+        }
+
+        internal void HideRemaining(Transaction acTrans)
+        {
+            if (lstPolyline != null)
+            {
+                int intTotal = GetCount();
+                int intPline = lstPolyline.Count;
+
+                {
+                    for (int i = intTotal; i < intPline; i++)
+                    {
+                        if (lstVisible[i])
+                        {
+                            Polyline acPline = lstPolyline[i];
+                            acPline = acTrans.GetObject(acPline.ObjectId, OpenMode.ForWrite) as Polyline;
+                            acPline.Visible = false;
+                            lstVisible[i] = false;
+                        }
+                    }
+                }
+            }
+        }
+
+        internal int GetCount()
+        {
+            int intLineCount = 0;
+            if (StaticRock.lstBoundingBox.Count > 0)
+            {
+                for (int i = 0; i < StaticRock.lstBoundingBox.Count; i++)
+                {
+                    EngineBoundingBox EngineBoundingBox = StaticRock.lstBoundingBox[i];
+                    intLineCount += EngineBoundingBox.lstLine.Count;
+                }
+            }
+
+            return intLineCount;
         }
     }
 }

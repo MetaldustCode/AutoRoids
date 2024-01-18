@@ -34,15 +34,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="accoremgd">
-      <HintPath>..\..\Program Files\Autodesk\AutoCAD 2024\accoremgd.dll</HintPath>
+      <HintPath>..\..\..\Program Files\Autodesk\AutoCAD 2024\accoremgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="acdbmgd">
-      <HintPath>..\..\Program Files\Autodesk\AutoCAD 2024\acdbmgd.dll</HintPath>
+      <HintPath>..\..\..\Program Files\Autodesk\AutoCAD 2024\acdbmgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="acmgd">
-      <HintPath>..\..\Program Files\Autodesk\AutoCAD 2024\acmgd.dll</HintPath>
+      <HintPath>..\..\..\Program Files\Autodesk\AutoCAD 2024\acmgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="PresentationCore" />
@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="CustomClass\Engine\EngineBoundingBox.cs" />
     <Compile Include="CustomClass\Engine\EngineScore.cs" />
+    <Compile Include="CustomClass\Engine\EngineShipDebris.cs" />
     <Compile Include="CustomClass\Game\GameIntersection.cs" />
     <Compile Include="CustomClass\Game\GameLine.cs" />
     <Compile Include="CustomClass\Game\GameRockData.cs" />
@@ -93,9 +94,10 @@
     <Compile Include="Common\Static\clsPoints.cs" />
     <Compile Include="Common\Static\clsStaticRock.cs" />
     <Compile Include="GameBuild\BackGround\clsStars.cs" />
+    <Compile Include="GameBuild\Cache\clsCacheGetBoundingBox.cs" />
     <Compile Include="GameBuild\Cache\clsCacheGetBullet.cs" />
-    <Compile Include="GameBuild\Cache\clsCacheGetPolyline.cs" />
     <Compile Include="GameBuild\Cache\clsCacheGetExplode.cs" />
+    <Compile Include="GameBuild\Cache\clsCacheGetDebris.cs" />
     <Compile Include="GameBuild\CreateLevel\clsCreateBullet.cs" />
     <Compile Include="GameBuild\CreateLevel\clsCreateCommon.cs" />
     <Compile Include="GameBuild\CreateLevel\clsCreateExplode.cs" />
@@ -112,7 +114,6 @@
     <Compile Include="GameBuild\Geometry\clsAppend.cs" />
     <Compile Include="GameBuild\Geometry\clsDeleteEntity.cs" />
     <Compile Include="GameBuild\GetPoints\clsGetPointsBorder.cs" />
-    <Compile Include="GameLoop\Collision\clsExplodeRock.cs" />
     <Compile Include="GameLoop\Collision\clsExplodeShip.cs" />
     <Compile Include="GameLoop\Collision\clsTrim.cs" />
     <Compile Include="GameLoop\Collision\clsTrimCommon.cs" />
@@ -136,6 +137,8 @@
     <Compile Include="GameLoop\Input\clsKeyboard.cs" />
     <Compile Include="GameLoop\Input\clsSharpDx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserFormCode\clsGetViewSize.cs" />
+    <Compile Include="UserFormCode\clsViewUtil.cs" />
     <Compile Include="UserFormCode\clsInit.cs" />
     <Compile Include="UserFormCode\clsPalette.cs" />
     <Compile Include="UserFormCode\clsReg.cs" />

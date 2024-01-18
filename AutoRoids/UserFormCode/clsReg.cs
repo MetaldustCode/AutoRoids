@@ -47,7 +47,7 @@ namespace AutoRoids
                 return strValue;
             else
             {
-                dblSpeed = 0;
+                dblSpeed = 1;
                 return "1";
             }
         }

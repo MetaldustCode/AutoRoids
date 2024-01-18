@@ -8,81 +8,113 @@ namespace AutoRoids
     {
         internal void GameLoop(int intElapsed, int intIdleDelay)
         {
-            // Reset Polyline Counter
-            clsCacheGetPolyline.intPolyline = 0;
-            clsCacheGetPoint.intPoint = 0;
-            clsCacheGetBullet.intBlkRef = 0;
-            clsCacheGetExplode.intBlkRef = 0;
 
-            StaticRock.lstBoundingBox.Clear();
+
+
+
+            //  StaticRock.lstBoundingBox.Clear();
 
             Document acDoc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
-            Database acDb = acDoc.Database;
-
-            using (Transaction acTrans = acDb.TransactionManager.StartTransaction())
+            if (acDoc != null)
             {
-                using (DocumentLock @lock = acDoc.LockDocument())
+                Database acDb = acDoc.Database;
+
+                using (Transaction acTrans = acDb.TransactionManager.StartTransaction())
                 {
-                    if (!StaticRock.bolBoundingBox)
+                    using (DocumentLock @lock = acDoc.LockDocument())
                     {
-                        clsCacheGetPolyline clsCache = new clsCacheGetPolyline();
-                        clsCache.HidePolyline(acTrans);
-                    }
+                        ResetCacheCounter(acTrans);
 
-                    BlockTable acBlkTbl = acTrans.GetObject(acDb.BlockTableId, OpenMode.ForRead) as BlockTable;
 
-                    clsUpdateRock clsUpdateRock = new clsUpdateRock();
 
-                    if (intElapsed >= intIdleDelay)
-                    {
-                        clsFireBullets clsFireBullets = new clsFireBullets();
-
-                        // for (int i = 0; i < 5; i++)
+                        if (!StaticRock.bolBoundingBox)
                         {
-                            clsFireCollision clsFireCollision = new clsFireCollision();
-
-                            clsUpdateRock.UpdateRockDataFrame();
-
-                            if (!StaticRock.EngineShip.bolExplode)
-                            {
-                                clsUpdateShip clsUpdateShip = new clsUpdateShip();
-                                List<enumDirection> lstDirection = clsUpdateShip.MoveShip();
-                                clsFireBullets.FireBullet(lstDirection);
-
-                                if (!lstDirection.Contains(enumDirection.Shield))
-                                    if (clsFireCollision.ShipCollision(acTrans, acDb, acBlkTbl))
-                                        StaticRock.EngineShip.bolExplode = true;
-                            }
-                            else
-                            {
-                                clsExplodeShip clsExplodeShip = new clsExplodeShip();
-                                clsExplodeShip.ExplodeShip(acTrans, acDb);
-                            }
-
-                            clsFireBullets.OffsetBullets();
-                            clsFireBullets.WrapBullet();
-
-                            clsFireCollision.FireCollision(acTrans, acDb, acBlkTbl);
-                            clsFireCollision.OffsetExplode();
-
-                            // Engine Objects
-                            List<EngineRock> lstEngineRock = StaticRock.lstEngineRock;
-                            List<EngineBullet> lstBullets = StaticRock.lstBullets;
-                            List<EngineExplode> lstExplode = StaticRock.lstExplode;
-                            EngineShip EngineShip = StaticRock.EngineShip;
+                            clsCacheGetBoundingBox clsCacheGetBoundingBox = new clsCacheGetBoundingBox();
+                            clsCacheGetBoundingBox.HideBoundingBox(acTrans);
                         }
 
-                        clsGetBoundingBox clsGetBoundingBox = new clsGetBoundingBox();
-                        clsGetBoundingBox.DrawingBoundingBox(acTrans, acDb);
+                        BlockTable acBlkTbl = acTrans.GetObject(acDb.BlockTableId, OpenMode.ForRead) as BlockTable;
 
-                        clsUpdateRock.UpdateRockGraphics(acTrans, acDb, acBlkTbl);
+                        clsUpdateRock clsUpdateRock = new clsUpdateRock();
+
+                        if (intElapsed >= intIdleDelay)
+                        {
+                            clsFireBullets clsFireBullets = new clsFireBullets();
+
+                            // for (int i = 0; i < 5; i++)
+                            {
+                                clsFireCollision clsFireCollision = new clsFireCollision();
+
+                                clsUpdateRock.UpdateRockDataFrame();
+
+                                if (!StaticRock.EngineShip.bolExplode)
+                                {
+                                    clsUpdateShip clsUpdateShip = new clsUpdateShip();
+                                    List<enumDirection> lstDirection = clsUpdateShip.MoveShip();
+                                    clsFireBullets.FireBullet(lstDirection);
+
+                                    if (!lstDirection.Contains(enumDirection.Shield))
+                                        if (clsFireCollision.ShipCollision(acTrans, acDb, acBlkTbl))
+                                            StaticRock.EngineShip.bolExplode = true;
+                                }
+                                else
+                                {
+                                    // Transaction to Update Player Block
+                                    clsExplodeShip clsExplodeShip = new clsExplodeShip();
+                                    clsExplodeShip.ExplodeShip(acTrans);                                 
+                                }
+
+                                clsFireBullets.OffsetBullets();
+                                clsFireBullets.WrapBullet();
+
+                                clsFireCollision.FireCollision(acTrans, acDb, acBlkTbl);
+                                clsFireCollision.OffsetExplode();
+
+                                // Engine Objects
+                                List<EngineRock> lstEngineRock = StaticRock.lstEngineRock;
+                                List<EngineBullet> lstBullets = StaticRock.lstBullets;
+                                List<EngineExplode> lstExplode = StaticRock.lstExplode;
+                                EngineShip EngineShip = StaticRock.EngineShip;
+                            }
+
+                            clsGetBoundingBox clsGetBoundingBox = new clsGetBoundingBox();
+                            clsGetBoundingBox.DrawingBoundingBox(acTrans, acDb);
+
+                            clsUpdateRock.UpdateRockGraphics(acTrans, acDb, acBlkTbl);
+                        }
+
+                        acTrans.Commit();
                     }
-
-                    acTrans.Commit();
                 }
-            }
 
-            Autodesk.AutoCAD.ApplicationServices.Application.UpdateScreen();
+                Autodesk.AutoCAD.ApplicationServices.Application.UpdateScreen();
+            }
+        }
+
+        private void ResetCacheCounter(Transaction acTrans)
+        {
+            if (StaticRock.lstShipDebris == null)
+                StaticRock.lstShipDebris = new List<EngineShipDebris>();
+            else
+                StaticRock.lstShipDebris.Clear();
+
+            clsCacheGetDebris.intPolyline = 0;
+
+
+            if (StaticRock.lstBoundingBox == null)
+                StaticRock.lstBoundingBox = new List<EngineBoundingBox>();  
+            else
+                StaticRock.lstBoundingBox.Clear();
+
+            clsCacheGetBoundingBox.intPolyline = 0;
+
+            //clsCacheGetBoundingBox clsCacheGetBoundingBox = new clsCacheGetBoundingBox();
+            //// clsCacheGetBoundingBox.HidePolyline(acTrans);
+            //clsCacheGetBoundingBox.intPolyline = 0;
+
+            //clsCacheGetPoint.intPoint = 0;
+            clsCacheGetBullet.intBlkRef = 0;
+            clsCacheGetExplode.intBlkRef = 0;
         }
     }
 }

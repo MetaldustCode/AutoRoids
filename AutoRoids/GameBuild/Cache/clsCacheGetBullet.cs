@@ -59,16 +59,19 @@ namespace AutoRoids
                 if (StaticRock.lstBullets.Count > 0)
                     intCount = StaticRock.lstBullets.Count - 1;
 
-                for (int i = intCount; i < _lstBullet.Count; i++)
+                if (_lstIsVisible.Contains(true))
                 {
-                    if (_lstIsVisible[i])
+                    for (int i = intCount; i < _lstBullet.Count; i++)
                     {
-                        BlockReference acBlkRef = _lstBullet[i];
-                        if (acBlkRef.ObjectId.IsValid && !acBlkRef.ObjectId.IsErased)
+                        if (_lstIsVisible[i])
                         {
-                            acBlkRef = acTrans.GetObject(acBlkRef.ObjectId, OpenMode.ForWrite) as BlockReference;
-                            acBlkRef.Visible = false;
-                            _lstIsVisible[i] = false;
+                            BlockReference acBlkRef = _lstBullet[i];
+                            if (acBlkRef.ObjectId.IsValid && !acBlkRef.ObjectId.IsErased)
+                            {
+                                acBlkRef = acTrans.GetObject(acBlkRef.ObjectId, OpenMode.ForWrite) as BlockReference;
+                                acBlkRef.Visible = false;
+                                _lstIsVisible[i] = false;
+                            }
                         }
                     }
                 }

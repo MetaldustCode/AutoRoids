@@ -119,7 +119,7 @@ namespace AutoRoids
             Point2d ptNew = new Point2d(position.X + (sa * dblOffset),
                                         position.Y - (ca * dblOffset));
 
-            ShowDebug(position, ptNew);
+            // ShowDebug(position, ptNew);
 
             position = ptNew;
         }

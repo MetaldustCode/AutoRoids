@@ -143,15 +143,13 @@ namespace AutoRoids
 
         internal void WrapBullet(double dblScale, ref Point2d pt, Double dblAngle, List<Point2d> lstBorder)
         {
-            clsCacheGetPolyline clsCache = new clsCacheGetPolyline();
-
             clsWrap clsWrap = new clsWrap();
             clsWrap.CalculateRiseOverRun(dblAngle, 10.0,
                                  out double dblRise, out double dblRun);
 
             List<Point2d> lstBox = pt.CreateBoundingBoxFromPoint(dblScale);
 
-            clsWrap.WrapPosition(lstBox, lstBorder, dblRise, dblRun, 3, false, ref pt);
+            clsWrap.WrapPosition(lstBox, lstBorder, dblRise, dblRun, 3, false, ref pt);;
         }
 
     }

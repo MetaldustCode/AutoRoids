@@ -1,6 +1,7 @@
 ﻿using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace AutoRoids
@@ -11,39 +12,60 @@ namespace AutoRoids
         {
             if (StaticRock.bolBoundingBox)
             {
-                // if (intIndexColor == 3)
-                {
-                    List<List<Point2d>> lstMyLine = lstBox.GroupIntoLines();
+                List<List<Point2d>> lstLstMyLine = lstBox.GroupIntoLines();
 
-                    List<GameLine> lstGameLine = new List<GameLine>();
+                List<GameLine> lstGameLine = new List<GameLine>();
+                for (int i = 0; i < lstLstMyLine.Count; i++)
+                    lstGameLine.Add(new GameLine(lstLstMyLine[i][0], lstLstMyLine[i][1]));
 
-                    for (int i = 0; i < lstMyLine.Count; i++)
-                        lstGameLine.Add(new GameLine(lstMyLine[i][0], lstMyLine[i][1]));
-
-                    StaticRock.lstBoundingBox.Add(new EngineBoundingBox(lstGameLine, intIndexColor));
-                }
+                if (StaticRock.lstBoundingBox == null)
+                    StaticRock.lstBoundingBox = new List<EngineBoundingBox>();
+       
+                StaticRock.lstBoundingBox.Add(new EngineBoundingBox(lstGameLine, intIndexColor));
             }
+
+            //if (StaticRock.bolBoundingBox)
+            //{
+            //    // if (intIndexColor == 3)
+            //    {
+            //        List<List<Point2d>> lstLstMyLine = lstBox.GroupIntoLines();
+
+
+            //        for (int i = 0; i < lstLstMyLine.Count; i++)
+            //            // clsCacheGetShip.GetPolyline(acTrans, acDb, lstLstMyLine[i], 3, 1 * StaticRock.dblGameScale);
+
+            //            clsCacheGetShip.GetPolyline(acTrans, acDb, lstLstMyLine[i], 3, 1);
+
+
+
+            //        List<GameLine> lstGameLine = new List<GameLine>();
+
+            //        for (int i = 0; i < lstMyLine.Count; i++)
+            //            lstGameLine.Add(new GameLine(lstMyLine[i][0], lstMyLine[i][1]));
+
+            //        StaticRock.lstBoundingBox.Add(new EngineBoundingBox(lstGameLine, intIndexColor));
+            //    }
+            //}
         }
 
         internal void DrawingBoundingBox(Transaction acTrans, Database acDb)
         {
-          
 
-            List<EngineBoundingBox> lstBoundingBox = StaticRock.lstBoundingBox;
+            //List<EngineBoundingBox> lstBoundingBox = StaticRock.lstBoundingBox;
 
-            clsCacheGetPolyline clsCacheGetPolyline = new clsCacheGetPolyline();
+            //clsCacheGetBoundingBox clsCacheGetBoundingBox = new clsCacheGetBoundingBox();
 
-            for (int i = 0; i < lstBoundingBox.Count; i++)
-            {
-                for (int k = 0; k < lstBoundingBox[i].lstLine.Count; k++)
-                {
+            //for (int i = 0; i < lstBoundingBox.Count; i++)
+            //{
+            //    for (int k = 0; k < lstBoundingBox[i].lstLine.Count; k++)
+            //    {
+            //        List<Point2d> lstLine = new List<Point2d> {
+            //            lstBoundingBox[i].lstLine[k].ptStart,
+            //            lstBoundingBox[i].lstLine[k].ptEnd };
 
-                    List<Point2d> lstLine = new List<Point2d> {
-                        lstBoundingBox[i].lstLine[k].ptStart,
-                        lstBoundingBox[i].lstLine[k].ptEnd };
-                    clsCacheGetPolyline.GetPolyline(acTrans, acDb, lstLine, lstBoundingBox[i].intColor, 1);
-                }
-            }
+            //        clsCacheGetBoundingBox.GetPolyline(acTrans, acDb, lstLine, lstBoundingBox[i].intColor, 1);
+            //    }
+            //}
         }
 
 

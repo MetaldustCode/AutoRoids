@@ -50,7 +50,7 @@ namespace AutoRoids
 
         internal static List<Point2d> CreateBoundingBoxFromPoint(this Point2d pt, double dblScale)
         {
-            double d = dblScale / 6;
+            double d = dblScale / 6; 
 
             Point2d pt1 = new Point2d(pt.X - d, pt.Y - d);
             Point2d pt2 = new Point2d(pt.X + d, pt.Y - d);

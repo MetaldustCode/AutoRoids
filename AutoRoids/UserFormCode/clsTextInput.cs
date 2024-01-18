@@ -19,6 +19,16 @@ namespace AutoRoids
             return false;
         }
 
+        internal Boolean DisableZero(string strName)
+        {
+            List<String> lstValue = new List<string> { "txtShipThrust", "txtGameScale" };
+
+            if (lstValue.Contains(strName))
+                return true;
+            return false;
+        }
+
+
         internal string FilterDecimal(string strText)
         {
             if (strText == ".")
@@ -34,14 +44,32 @@ namespace AutoRoids
 
             if (IsDouble(strName))
             {
+
                 if (double.TryParse(text, out double dblValue))
-                    return true;
+                {
+                    if (DisableZero(strName))
+                    {
+                        if (dblValue != 0)
+                            return true;
+                    }
+                    else
+                        return true;
+                }
             }
             else
             {
                 if (int.TryParse(text, out int intValue))
-                    return true;
+                {
+                    if (DisableZero(strName))
+                    {
+                        if (intValue != 0)
+                            return true;
+                    }
+                    else
+                        return true;
+                }
             }
+
 
             return false;
         }

@@ -2,6 +2,7 @@
 using Autodesk.AutoCAD.Geometry;
 using System;
 using System.Collections.Generic;
+using System.Windows.Media.Animation;
 
 namespace AutoRoids
 {
@@ -11,16 +12,14 @@ namespace AutoRoids
         internal static List<Double> lstRotation = new List<double>();
         internal static List<Double> lstOffset = new List<double>();
 
-        internal static int intLoop = 0;
-
-        internal void ExplodeShip(Transaction acTrans, Database acDb)
+        internal void ExplodeShip(Transaction acTrans)
         {
             EngineShip engineShip = StaticRock.EngineShip;
 
-            ExplodeShip(engineShip, acTrans, acDb);
+            ExplodeShip(engineShip, acTrans);
         }
 
-        internal void ExplodeShip(EngineShip engineShip, Transaction acTrans, Database acDb)
+        internal void ExplodeShip(EngineShip engineShip, Transaction acTrans)
         {
             clsCenterCollision clsCenterCollision = new clsCenterCollision();
             Point2d ptOrigin = engineShip.ptBlockOrigin;
@@ -28,14 +27,14 @@ namespace AutoRoids
             int intCount = engineShip.intExplode;
 
             if (intCount == 0)
-                SetRandomValues(engineShip);
-       
+                lstLstMyLine = SetRandomValues(engineShip);
+
             if (intCount < 255 || clsCenterCollision.CheckIsCollision())
             {
                 for (int i = 0; i < lstLstMyLine.Count; i++)
                     lstLstMyLine[i] = Rotate(lstLstMyLine[i], ptOrigin, lstOffset[i], lstRotation[i]);
 
-                LoopColor(acTrans, acDb);
+                CreateShipDebris(lstLstMyLine);
 
                 engineShip.intExplode++;
             }
@@ -53,33 +52,29 @@ namespace AutoRoids
 
                 if (clsUpdatePlayer.RemovePlayer(acTrans))
                     StaticRock.EngineScore.bolReset = true;
-
             }
         }
 
-        internal void LoopColor(Transaction acTrans, Database acDb)
+        internal void CreateShipDebris(List<List<Point2d>> lstLstMyLine)
         {
-            clsCacheGetPolyline clsCacheGetPolyline = new clsCacheGetPolyline();
-
+            List<GameLine> lstGameLine = new List<GameLine>();
             for (int i = 0; i < lstLstMyLine.Count; i++)
-                clsCacheGetPolyline.GetPolyline(acTrans, acDb, lstLstMyLine[i], 3, 1);
+                lstGameLine.Add(new GameLine(lstLstMyLine[i][0], lstLstMyLine[i][1]));
 
-            // Fix Line Scale
-            //clsCacheGetPolyline.GetPolyline(acTrans, acDb, lstLstMyLine[i], 3, 1 * StaticRock.dblGameScale);
+            if (StaticRock.lstShipDebris == null)
+                StaticRock.lstShipDebris = new List<EngineShipDebris>();
 
-            intLoop++;
-            if (intLoop > 255)
-                intLoop = 0;
+            StaticRock.lstShipDebris.Add(new EngineShipDebris(lstGameLine, 3, 1));
         }
 
 
-        internal void SetRandomValues(EngineShip engineShip)
+        internal List<List<Point2d>> SetRandomValues(EngineShip engineShip)
         {
             clsCreatePoints clsGeneratePoints = new clsCreatePoints();
             Random random = clsGeneratePoints.GetRandom();
 
             List<Point2d> lstMatrix = engineShip.lstLstMatrix3dShip[0];
-            lstLstMyLine = lstMatrix.GroupIntoLines();
+            List<List<Point2d>> lstLstMyLine = lstMatrix.GroupIntoLines();
 
             lstRotation.Clear();
 
@@ -90,6 +85,8 @@ namespace AutoRoids
 
             for (int i = 0; i < lstLstMyLine.Count; i++)
                 lstOffset.Add(random.GetDouble(0.1, 0.5));
+
+            return lstLstMyLine;
         }
 
         internal List<Point2d> Rotate(List<Point2d> lstMyLine, Point2d ptOrigin,

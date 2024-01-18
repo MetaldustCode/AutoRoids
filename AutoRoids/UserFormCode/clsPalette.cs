@@ -6,8 +6,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Controls;
 
+[assembly: CommandClass(typeof(AutoRoids.clsPalette))]
+
 namespace AutoRoids
 {
+
     public class clsPalette
     {
         internal static PaletteSet _ps = null;

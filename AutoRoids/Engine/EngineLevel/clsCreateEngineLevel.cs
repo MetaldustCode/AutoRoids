@@ -39,8 +39,12 @@ namespace AutoRoids
 
             StaticRock.SetStaticRegistry(bolReset);
 
-            clsCacheGetPolyline clsCacheGetPolyline = new clsCacheGetPolyline();
-            clsCacheGetPolyline.HidePolyline(acTrans);
+            clsCacheGetBoundingBox clsCacheGetBoundingBox = new clsCacheGetBoundingBox();
+            clsCacheGetBoundingBox.HideBoundingBox(acTrans);
+
+            clsCacheGetDebris clsCacheGetShip = new clsCacheGetDebris();
+            clsCacheGetShip.HideDebris(acTrans);
+
 
             if (bolReset)
             {

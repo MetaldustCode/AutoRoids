@@ -58,7 +58,7 @@ namespace AutoRoids
 
         internal List<EngineRock> CreateNewExplodedRock(Transaction acTrans, Database acDb, BlockTable acBlkTbl,
                                                     enumSize RockSize, Point2d ptOrigin, double dblAngle,
-                                                    int intColorIndex, double dblDistance)
+                                                    int intColorIndex)
         {
             clsCreatePoints clsGeneratePoints = new clsCreatePoints();
             Random random = clsGeneratePoints.GetRandom();

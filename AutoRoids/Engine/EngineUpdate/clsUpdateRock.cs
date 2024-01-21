@@ -31,7 +31,7 @@ namespace AutoRoids
             }
         }
 
-        internal void UpdateRockGraphics(Transaction acTrans, Database acDb, BlockTable acBlkTbl)
+        internal void UpdateGraphics(Transaction acTrans, Database acDb, BlockTable acBlkTbl)
         {
             ProcessRock(acTrans);
 

@@ -98,6 +98,7 @@
     <Compile Include="GameBuild\Cache\clsCacheGetBullet.cs" />
     <Compile Include="GameBuild\Cache\clsCacheGetExplode.cs" />
     <Compile Include="GameBuild\Cache\clsCacheGetDebris.cs" />
+    <Compile Include="GameBuild\Cache\clsCacheGetRock.cs" />
     <Compile Include="GameBuild\CreateLevel\clsCreateBullet.cs" />
     <Compile Include="GameBuild\CreateLevel\clsCreateCommon.cs" />
     <Compile Include="GameBuild\CreateLevel\clsCreateExplode.cs" />

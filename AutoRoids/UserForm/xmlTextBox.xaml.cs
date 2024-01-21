@@ -37,7 +37,14 @@ namespace AutoRoids.UserForm
                             // Reset previous values
                             int cursorPosition = textBox.CaretIndex;
                             textBox.Text = clsTextInput.GetData(strName);
-                            textBox.CaretIndex = cursorPosition - 1;
+                            try
+                            {
+                                textBox.CaretIndex = cursorPosition - 1;
+                            }
+                            catch (Exception)
+                            {                       
+                            }
+                          
                         }
                         else
                             clsTextInput.SaveData(strName, strText);

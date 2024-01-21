@@ -26,7 +26,9 @@ namespace AutoRoids
                         double dblAngle = GameExplode.dblAngle;
 
                         ptOrigin = ptOrigin.CalculatePoint(dblAngle, dblOffset);
-                        GameExplode.dblTraveled += (dblOffset + clsMoveShip.dblVelocity);
+                        // Create larger explosion when ship is moving
+                        GameExplode.dblTraveled += (dblOffset - (clsMoveShip.dblVelocity / 2));
+
                         GameExplode.ptOrigin = ptOrigin;
                         lstExplode[i] = GameExplode;
                     }
@@ -88,14 +90,13 @@ namespace AutoRoids
         internal Boolean FireCollision(Transaction acTrans, Database acDb, BlockTable acBlkTbl,
                                        Point2d pt, double dblAngle)
         {
-
             Boolean rtnValue = false;
 
             List<Point2d> lstOrigin = new List<Point2d>();
             List<Double> lstAngle = new List<Double>();
             List<enumSize> lstSize = new List<enumSize>();
             List<int> lstIndexColor = new List<int>();
-            List<Double> lstDistance = new List<double>();
+            // List<Double> lstDistance = new List<double>();
             List<Double> lstScale = new List<double>();
             List<int> lstColor = new List<int>();
 
@@ -116,7 +117,7 @@ namespace AutoRoids
                         lstAngle.Add(dblAngle);
                         lstSize.Add(StaticRock.lstEngineRock[k].RockSize);
                         lstIndexColor.Add(engineRock.intColorIndex);
-                        lstDistance.Add(StaticRock.lstEngineRock[k].dblDistance * 2);
+                        //lstDistance.Add(StaticRock.lstEngineRock[k].dblDistance * 2);
                         lstScale.Add(engineRock.dblScale);
                         lstColor.Add(engineRock.intColorIndex);
 
@@ -131,14 +132,13 @@ namespace AutoRoids
                 AddNewRock(acTrans, acDb, acBlkTbl, lstOrigin,
                            lstAngle,
                            lstSize,
-                           lstIndexColor,
-                           lstDistance);
+                           lstIndexColor);
+
 
                 AddExplode(lstOrigin,
                            lstScale,
                            lstColor);
             }
-
 
             return rtnValue;
         }
@@ -152,7 +152,7 @@ namespace AutoRoids
             List<Double> lstAngle = new List<Double>();
             List<enumSize> lstSize = new List<enumSize>();
             List<int> lstIndexColor = new List<int>();
-            List<Double> lstDistance = new List<double>();
+            //List<Double> lstDistance = new List<double>();
             List<Double> lstScale = new List<double>();
             List<int> lstColor = new List<int>();
 
@@ -161,79 +161,20 @@ namespace AutoRoids
             lstAngle.Add(dblAngle);
             lstSize.Add(StaticRock.lstEngineRock[k].RockSize);
             lstIndexColor.Add(engineRock.intColorIndex);
-            lstDistance.Add(StaticRock.lstEngineRock[k].dblDistance * 2);
+            //lstDistance.Add(StaticRock.lstEngineRock[k].dblDistance * 2);
             lstScale.Add(engineRock.dblScale);
             lstColor.Add(engineRock.intColorIndex);
 
             AddNewRock(acTrans, acDb, acBlkTbl, lstOrigin,
                        lstAngle,
                        lstSize,
-                       lstIndexColor,
-                       lstDistance);
+                       lstIndexColor);
+
 
             AddExplode(lstOrigin,
                        lstScale,
                        lstColor);
         }
-
-
-        //internal void FireCollision(Transaction acTrans, Database acDb, BlockTable acBlkTbl)
-        //{
-        //    List<Point2d> lstOrigin = new List<Point2d>();
-        //    List<Double> lstAngle = new List<Double>();
-        //    List<enumSize> lstSize = new List<enumSize>();
-        //    List<int> lstIndexColor = new List<int>();
-        //    List<Double> lstDistance = new List<double>();
-        //    List<Double> lstScale = new List<double>();
-        //    List<int> lstColor = new List<int>();
-
-        //    for (int i = StaticRock.lstBullets.Count - 1; i >= 0; i--)
-        //    {
-        //        EngineBullet engineBullets = StaticRock.lstBullets[i];
-
-        //        Point2d pt = engineBullets.ptOrigin;
-
-        //        for (int k = StaticRock.lstEngineRock.Count - 1; k >= 0; k--)
-        //        {
-        //            EngineRock engineRock = StaticRock.lstEngineRock[k];
-
-        //            if (!engineRock.bolExploded)
-        //            {
-        //                List<Point2d> lstMatrix3d = engineRock.lstMatrix3d;
-        //                clsGetInsideBoundary clsGetInsideBoundary = new clsGetInsideBoundary();
-        //                if (clsGetInsideBoundary.IsInside(pt, lstMatrix3d))
-        //                {
-        //                    // Delete Bullet
-        //                    StaticRock.lstBullets[i].dblTraveled = StaticRock.dblBulletMaxTravel;
-
-        //                    lstOrigin.Add(engineRock.ptBlockOrigin);
-        //                    lstAngle.Add(engineBullets.dblAngle);
-        //                    lstSize.Add(StaticRock.lstEngineRock[k].RockSize);
-        //                    lstIndexColor.Add(engineRock.intColorIndex);
-        //                    lstDistance.Add(StaticRock.lstEngineRock[k].dblDistance * 2);
-        //                    lstScale.Add(engineRock.dblScale);
-        //                    lstColor.Add(engineRock.intColorIndex);
-
-        //                    // Delete Rock
-        //                    StaticRock.lstEngineRock[k].bolExploded = true;
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    if (lstOrigin.Count > 0)
-        //    {
-        //        AddNewRock(acTrans, acDb, acBlkTbl, lstOrigin,
-        //                   lstAngle,
-        //                   lstSize,
-        //                   lstIndexColor,
-        //                   lstDistance);
-
-        //        AddExplode(lstOrigin,
-        //                   lstScale,
-        //                   lstColor);
-        //    }
-        //}
 
         internal void AddExplode(List<Point2d> lstOrigin,
                                  List<double> lstScale,
@@ -250,8 +191,8 @@ namespace AutoRoids
                                  List<Point2d> lstOrigin,
                                  List<Double> lstAngle,
                                  List<enumSize> lstSize,
-                                 List<int> lstColorIndex,
-                                 List<Double> lstDistance)
+                                 List<int> lstColorIndex)
+
         {
             clsCreateExplode clsCreateExplode = new clsCreateExplode();
             for (int i = 0; i < lstSize.Count; i++)
@@ -263,15 +204,12 @@ namespace AutoRoids
                                                                lstSize[i],
                                                                lstOrigin[i],
                                                                lstAngle[i],
-                                                               lstColorIndex[i],
-                                                               lstDistance[i]);
+                                                               lstColorIndex[i]);
 
                     for (int k = 0; k < lstGameRock.Count; k++)
                         StaticRock.lstEngineRock.Add(lstGameRock[k]);
                 }
             }
         }
-
-
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -82,7 +83,7 @@ namespace AutoRoids.UserForm
                     }
                     else
                         Gameloop();
-                }
+                } 
             }
 
             if (StaticRock.EngineScore.bolReset)
@@ -114,11 +115,7 @@ namespace AutoRoids.UserForm
             if (this.btnStop.Content.ToString() == "Pause")
                 this.btnStop.Content = "Continue";
             else
-                this.btnStop.Content = "Pause";
-
-            // RemovePlayer();
-
-            //AddNewPlayer();
+                this.btnStop.Content = "Pause";       
         }
 
         private void chkBox_Checked(object sender, RoutedEventArgs e)
@@ -155,6 +152,7 @@ namespace AutoRoids.UserForm
             {
                 intElapsed = Convert.ToInt32(clsTimers.GameStopWatch.StopWatchIdle.ElapsedMilliseconds);
 
+                //Debug.Print(intElapsed.ToString());
                 if (intElapsed > 50) intElapsed = 50;
 
                 clsTimers.GameStopWatch.StopWatchIdle.Restart();

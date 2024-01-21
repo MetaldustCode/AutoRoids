@@ -35,8 +35,7 @@ namespace AutoRoids
                     {
                         for (int i = 0; i < lstKeys.Count; i++)
                         {
-                            if (lstKeys[i] == Key.Up) lstDirection.Add(enumDirection.Up);
-                            if (lstKeys[i] == Key.Down) lstDirection.Add(enumDirection.Hyperspace);
+                            if (lstKeys[i] == Key.Up) lstDirection.Add(enumDirection.Up);                       
                             if (lstKeys[i] == Key.Right) lstDirection.Add(enumDirection.Right);
                             if (lstKeys[i] == Key.Left) lstDirection.Add(enumDirection.Left);
 
@@ -46,12 +45,11 @@ namespace AutoRoids
                             if (lstKeys[i] == Key.LeftShift) lstDirection.Add(enumDirection.Shield);
                             if (lstKeys[i] == Key.RightShift) lstDirection.Add(enumDirection.Shield);
 
-                            if (lstKeys[i] == Key.Delete) lstDirection.Add(enumDirection.DeathBlossom);
-                            if (lstKeys[i] == Key.End) lstDirection.Add(enumDirection.DeathBlossom);
-                            if (lstKeys[i] == Key.PageDown) lstDirection.Add(enumDirection.DeathBlossom);
+                            if (lstKeys[i] == Key.Delete) lstDirection.Add(enumDirection.Hyperspace);
+                            if (lstKeys[i] == Key.End) lstDirection.Add(enumDirection.DeathBlossom);                      
 
                             //if (lstDirection.Contains(enumDirection.DeathBlossom))
-                            //    lstDirection.Add(enumDirection.Shield);
+                            //    lstDirection.Add(enumDirection.Left);
 
                             // Debug.Print(lstKeys[i].ToString());
                         }

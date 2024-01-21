@@ -15,6 +15,7 @@ namespace AutoRoids
             Point2d ptStart = new Point2d(pt.X, pt.Y);
 
             GetRotate(lstDirection, ref dblAngleLocal);
+
             EngineShip.dblBlockRotation = dblAngleLocal;
 
             ShipPhysics(lstDirection.Contains(enumDirection.Up), dblAngleLocal, ref pt);
@@ -43,6 +44,9 @@ namespace AutoRoids
 
                 if (dir == enumDirection.Left)
                     dblAngle += StaticRock.dblShipAngle;
+
+                //if (dir == enumDirection.DeathBlossom)
+                //    dblAngle -= 7.5;
             }
         }
 

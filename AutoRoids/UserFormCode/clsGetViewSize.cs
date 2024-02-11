@@ -12,7 +12,7 @@ namespace AutoRoids
     public class MyCommands
     {
         [CommandMethod("GetViewSize")]
-        public static void RunMyCommand()
+        public  void RunMyCommand()
         {
             Document dwg = Application.DocumentManager.MdiActiveDocument;
             Editor ed = dwg.Editor;

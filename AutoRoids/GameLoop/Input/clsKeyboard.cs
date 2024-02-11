@@ -1,6 +1,9 @@
 ﻿using SharpDX.DirectInput;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Windows.Navigation;
 
 namespace AutoRoids
 {
@@ -8,12 +11,65 @@ namespace AutoRoids
     {
         internal List<enumDirection> GetDirection()
         {
-            return GetMovementKeyboard();
+            List<enumDirection> lstDirection = new List<enumDirection>();
+
+            if (!GetMovementKeyboard(out lstDirection))
+            {
+                GetMovementJoystick(out lstDirection);
+            }
+
+            return lstDirection;
         }
 
-        public List<enumDirection> GetMovementKeyboard()
+        internal Boolean GetMovementJoystick(out List<enumDirection> lstDirection)
         {
-            List<enumDirection> lstDirection = new List<enumDirection>();
+            Boolean rtnValue = false;
+
+            lstDirection = new List<enumDirection>();
+
+            var joystickState = new JoystickState();
+
+            try
+            {
+                clsSharpDX.joystick.GetCurrentState(ref joystickState);
+
+            }
+            catch (Exception)
+            {
+                return rtnValue;
+            }
+
+            if (joystickState != null)
+            {
+                for (int i = 0; i < joystickState.Buttons.Length; i++)
+                {
+                    if (joystickState.Buttons[i] == true)
+                    {
+                        // 0= B, 1 = A  2 = Y, 3 = X ;
+                        Debug.Print("");
+                    }
+                }
+
+
+                if (joystickState.X == 65535) lstDirection.Add(enumDirection.Right);
+                if (joystickState.X == 0) lstDirection.Add(enumDirection.Left);
+                if (joystickState.Y == 0) lstDirection.Add(enumDirection.Up);
+
+                if (joystickState.Buttons[3] == true) lstDirection.Add(enumDirection.Fire);
+                if (joystickState.Buttons[2] == true) lstDirection.Add(enumDirection.DeathBlossom);
+
+                if (joystickState.Buttons[1] == true) lstDirection.Add(enumDirection.Shield);
+                if (joystickState.Buttons[0] == true) lstDirection.Add(enumDirection.Hyperspace);
+
+            }
+            return rtnValue;
+
+        }
+
+        public bool GetMovementKeyboard(out List<enumDirection> lstDirection)
+        {
+            Boolean rtnValue = false;
+            lstDirection = new List<enumDirection>();
 
             var keyboardState = new KeyboardState();
             try
@@ -22,7 +78,7 @@ namespace AutoRoids
             }
             catch (Exception)
             {
-                return new List<enumDirection> { };
+                return rtnValue;
             }
 
             if (keyboardState != null)
@@ -33,9 +89,11 @@ namespace AutoRoids
 
                     if (lstKeys.Count > 0)
                     {
+                        rtnValue = true;
+
                         for (int i = 0; i < lstKeys.Count; i++)
                         {
-                            if (lstKeys[i] == Key.Up) lstDirection.Add(enumDirection.Up);                       
+                            if (lstKeys[i] == Key.Up) lstDirection.Add(enumDirection.Up);
                             if (lstKeys[i] == Key.Right) lstDirection.Add(enumDirection.Right);
                             if (lstKeys[i] == Key.Left) lstDirection.Add(enumDirection.Left);
 
@@ -46,17 +104,13 @@ namespace AutoRoids
                             if (lstKeys[i] == Key.RightShift) lstDirection.Add(enumDirection.Shield);
 
                             if (lstKeys[i] == Key.Delete) lstDirection.Add(enumDirection.Hyperspace);
-                            if (lstKeys[i] == Key.End) lstDirection.Add(enumDirection.DeathBlossom);                      
+                            if (lstKeys[i] == Key.End) lstDirection.Add(enumDirection.DeathBlossom);
 
-                            //if (lstDirection.Contains(enumDirection.DeathBlossom))
-                            //    lstDirection.Add(enumDirection.Left);
-
-                            // Debug.Print(lstKeys[i].ToString());
                         }
                     }
                 }
             }
-            return lstDirection;
+            return rtnValue;
         }
     }
 }
